@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "QfdDi94szeW96blNVv10z2hVJsWcgGH4R0TCvZNn0lg=",
+  "Source": "ScanAndGoApi",
+  "BasePath": "_content/ScanAndGoApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
