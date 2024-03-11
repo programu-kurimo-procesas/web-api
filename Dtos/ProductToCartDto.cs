@@ -3,6 +3,6 @@
     public class ProductToCartDto
     {
         public long ProductId { get; set; }
-        public long ShoppingListId { get; set; }
+        public long UserId { get; set; }
     }
 }

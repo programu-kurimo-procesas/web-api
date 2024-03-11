@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScanAndGoApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+528bb745ee45d6511e754343d64e57ed5e5da211")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScanAndGoApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScanAndGoApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

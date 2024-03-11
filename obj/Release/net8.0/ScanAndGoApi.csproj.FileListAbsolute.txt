@@ -133,3 +133,4 @@ C:\Users\janka\source\repos\ScanAndGoApi\ScanAndGoApi\bin\Release\net8.0\System.
 C:\Users\janka\source\repos\ScanAndGoApi\ScanAndGoApi\bin\Release\net8.0\System.Web.WebPages.Razor.dll
 C:\Users\janka\source\repos\ScanAndGoApi\ScanAndGoApi\bin\Release\net8.0\System.Web.WebPages.dll
 C:\Users\janka\source\repos\ScanAndGoApi\ScanAndGoApi\bin\Release\net8.0\Microsoft.Web.Infrastructure.dll
+C:\Users\janka\source\repos\ScanAndGoApi\ScanAndGoApi\obj\Release\net8.0\ScanAndGoApi.sourcelink.json

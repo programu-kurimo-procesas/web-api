@@ -12,8 +12,8 @@ namespace ScanAndGoApi.Models
         [JsonIgnore]
         public long Id { get; set; }
 
-        public DateTime DateCreated { get; set; }
         public List<ProductListAsc>? ProductsInList{ get; set; }
         public User User { get; set; }
+
     }
 }

@@ -23,48 +23,45 @@ namespace ScanAndGoApi.ApiController
             try
             {
                 using var context = new DatabaseContextFactory().CreateDbContext(null);
-                return new OkObjectResult(context.ShoppingLists.Where(sl => sl.User.id == userid).ToList());
+                var shoppingLists = context.ShoppingLists.Where(sl => sl.User.id == userid).ToList();
+                return new OkObjectResult(shoppingLists);
             }
             catch (Exception e)
             {
                 return new BadRequestObjectResult(e.Message);
             }
         }
-
-        [HttpPost("CreateShoppingList")]
-        public IActionResult Create([FromBody] int userid)
+        [HttpGet("GetAllProductsById/{id}")]
+        public IActionResult GetAllProductsById([FromRoute] int id)
         {
-            User? user;
             try
             {
                 using var context = new DatabaseContextFactory().CreateDbContext(null);
-                user = context.Users.Where(u => u.id == userid).FirstOrDefault();
-                if (user == null)
-                {
-                    return new BadRequestObjectResult("No such user with given id");
-                }
-            } 
+                var products = context.ProductListAsc.Where(pla => pla.ShoppingList.Id == id).Select(pla => pla.Product).ToList();
+                return new OkObjectResult(products);
+            }
             catch (Exception e)
             {
                 return new BadRequestObjectResult(e.Message);
             }
-
-            var shoppingList = new ShoppingList
-            {
-                DateCreated = DateTime.Now,
-                User = user
-            };
+        }
+        [HttpDelete("RemoveProductFromList")]
+        public IActionResult RemoveProductFromList([FromBody] ProductToCartDto dto)
+        {
             try
             {
                 using var context = new DatabaseContextFactory().CreateDbContext(null);
-                context.Users.Attach(shoppingList.User);
-                context.ShoppingLists.Add(shoppingList);
+                var product = context.ProductListAsc.Where(pla => pla.ShoppingList.Id == dto.UserId && pla.Product.id == dto.ProductId).FirstOrDefault();
+                if (product == null)
+                {
+                    return new NotFoundObjectResult("No such product in list");
+                }
+                context.ProductListAsc.Remove(product);
                 context.SaveChanges();
-                return new OkObjectResult(shoppingList);
+                return new OkObjectResult(product);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return new BadRequestObjectResult(e.Message);
             }
         }
@@ -82,7 +79,7 @@ namespace ScanAndGoApi.ApiController
                 {
                     return new BadRequestObjectResult("No such product with given id");
                 }
-                shoppingList = context.ShoppingLists.Where(sl => sl.Id == dto.ShoppingListId).FirstOrDefault();
+                shoppingList = context.ShoppingLists.Where(sl => sl.User.id == dto.UserId).FirstOrDefault();
                 if (shoppingList == null)
                 {
                     return new BadRequestObjectResult("No such shopping list with given id");
@@ -99,7 +96,14 @@ namespace ScanAndGoApi.ApiController
                     Product = product,
                     ShoppingList = shoppingList
                 };
+                
                 using var context = new DatabaseContextFactory().CreateDbContext(null);
+                //find if there exists one with the same product and shopping list
+                List<ProductListAsc> plas = context.ProductListAsc.Where(pla => pla.Product.id == product.id && pla.ShoppingList.Id == shoppingList.Id).ToList();
+                if (plas.Count > 0)
+                {
+                    return new BadRequestObjectResult("Product already in list");
+                }
                 context.Products.Attach(productInList.Product);
                 context.ShoppingLists.Attach(productInList.ShoppingList);
                 context.ProductListAsc.Add(productInList);

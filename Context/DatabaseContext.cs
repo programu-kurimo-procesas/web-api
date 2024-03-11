@@ -19,25 +19,21 @@ namespace ScanAndGoApi.Context
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.ShoppingLists)
-                .WithOne(sl => sl.User);
+                .HasOne(u => u.ShoppingList)
+                .WithOne(sl => sl.User)
+                .HasForeignKey<ShoppingList>(sl => sl.Id);
 
             modelBuilder.Entity<ShoppingList>()
                 .HasMany(sl => sl.ProductsInList)
                 .WithOne(pla => pla.ShoppingList);
 
-            modelBuilder.Entity<ShoppingList>()
-                .HasOne(sl => sl.User)
-                .WithMany(u => u.ShoppingLists);
+
 
             modelBuilder.Entity<ProductListAsc>()
                 .HasOne(pla => pla.Product)
                 .WithMany(p => p.ProductListAsc);
 
-            modelBuilder.Entity<ProductListAsc>()
-                .HasOne(pla => pla.ShoppingList)
-                .WithMany(sl => sl.ProductsInList);
-
+            
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.Items)
                 .WithOne(i => i.Product);

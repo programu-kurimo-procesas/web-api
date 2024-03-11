@@ -11,15 +11,15 @@ using ScanAndGoApi.Context;
 namespace ScanAndGoApi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240215101843_1.0")]
-    partial class _10
+    [Migration("20240310171852_shoppinglsitrel5")]
+    partial class shoppinglsitrel5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -57,6 +57,9 @@ namespace ScanAndGoApi.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -100,14 +103,7 @@ namespace ScanAndGoApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("Userid")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Userid");
 
                     b.ToTable("SHOPPING_LIST");
                 });
@@ -202,8 +198,8 @@ namespace ScanAndGoApi.Migrations
             modelBuilder.Entity("ScanAndGoApi.Models.ShoppingList", b =>
                 {
                     b.HasOne("ScanAndGoApi.Models.User", "User")
-                        .WithMany("ShoppingLists")
-                        .HasForeignKey("Userid")
+                        .WithOne("ShoppingList")
+                        .HasForeignKey("ScanAndGoApi.Models.ShoppingList", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -229,7 +225,8 @@ namespace ScanAndGoApi.Migrations
 
             modelBuilder.Entity("ScanAndGoApi.Models.User", b =>
                 {
-                    b.Navigation("ShoppingLists");
+                    b.Navigation("ShoppingList")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

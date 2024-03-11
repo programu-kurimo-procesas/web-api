@@ -12,7 +12,6 @@ namespace ScanAndGoApi.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        [JsonIgnore]
         public long id { get; set; }
 
         [Required] public string FirstName { get; set; }
@@ -23,6 +22,6 @@ namespace ScanAndGoApi.Models
         [Required] public string Password { get; set; }
 
         [JsonIgnore]
-        public List<ShoppingList> ShoppingLists { get; set; }
+        public ShoppingList? ShoppingList { get; set; }
     }
 }
