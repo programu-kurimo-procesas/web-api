@@ -10,7 +10,7 @@ namespace ScanAndGoApi.Context
         public DbSet<Store> Stores { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
         public DbSet<ProductListAsc> ProductListAsc { get; set; }
-
+        public DbSet<Shelf> Shelves { get; set; }
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,13 +47,18 @@ namespace ScanAndGoApi.Context
                 .WithMany(p => p.Items);
 
             modelBuilder.Entity<Item>()
-                .HasOne(i => i.Store)
+                .HasOne(i => i.Shelf)
                 .WithMany(s => s.Items);
 
             modelBuilder.Entity<Store>()
-                .HasMany(s => s.Items)
+                .HasMany(s => s.Shelves)
                 .WithOne(i => i.Store);
-
+            modelBuilder.Entity<Shelf>()
+                .HasOne(s => s.Store)
+                .WithMany(s => s.Shelves);
+            modelBuilder.Entity<Shelf>()
+                .HasMany(s => s.Items)
+                .WithOne(i => i.Shelf);
         }
     }
 }

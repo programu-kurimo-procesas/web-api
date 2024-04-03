@@ -9,10 +9,17 @@ namespace ScanAndGoApi.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        [JsonIgnore]
         public long Id { get; set; }
+
+        public string Name { get; set; }
         public string Address { get; set; }
 
-        public List<Item> Items { get; set; }
+
+        [JsonIgnore]
+        public string MapUrl { get; set; }
+
+
+        [JsonIgnore]
+        public List<Shelf> Shelves { get; set; }
     }
 }

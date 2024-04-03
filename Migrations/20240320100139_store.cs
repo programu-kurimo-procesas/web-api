@@ -5,7 +5,7 @@
 namespace ScanAndGoApi.Migrations
 {
     /// <inheritdoc />
-    public partial class shoppinglsitrel5 : Migration
+    public partial class store : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

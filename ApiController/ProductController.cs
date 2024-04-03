@@ -41,7 +41,7 @@ namespace ScanAndGoApi.ApiController
             {
                 using var context = new DatabaseContextFactory().CreateDbContext(null);
                 return new OkObjectResult(context.Products.ToList());
-            } 
+            }
             catch (Exception e)
             {
                 return new BadRequestObjectResult(e.Message);
@@ -64,7 +64,7 @@ namespace ScanAndGoApi.ApiController
                 }
                 var file = File.ReadAllBytes(@product.Image);
                 return new FileContentResult(file, "image/jpeg");
-               
+
             }
             catch (Exception e)
             {
@@ -72,5 +72,21 @@ namespace ScanAndGoApi.ApiController
             }
         }
 
+        [HttpGet("GetAllByShelfId/{id}")]
+        public IActionResult GetAllByShelfId([FromRoute] long id)
+        {
+            try
+            {
+                using var context = new DatabaseContextFactory().CreateDbContext(null);
+                var products = context.Products.Where(p => p.Items.Any(i => i.Shelf.Id == id)).ToList();
+                return new OkObjectResult(products);
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
+        }
+
+        
     }
 }

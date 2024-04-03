@@ -14,6 +14,6 @@ namespace ScanAndGoApi.Models
 
         [Required]
         public Product Product { get; set; }
-        public Store Store { get; set; }
+        public Shelf Shelf { get; set; }
     }
 }

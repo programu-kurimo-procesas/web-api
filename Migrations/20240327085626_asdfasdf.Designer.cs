@@ -11,8 +11,8 @@ using ScanAndGoApi.Context;
 namespace ScanAndGoApi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240310171852_shoppinglsitrel5")]
-    partial class shoppinglsitrel5
+    [Migration("20240327085626_asdfasdf")]
+    partial class asdfasdf
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,14 +35,14 @@ namespace ScanAndGoApi.Migrations
                     b.Property<long>("Productid")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("StoreId")
+                    b.Property<long>("ShelfId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Productid");
 
-                    b.HasIndex("StoreId");
+                    b.HasIndex("ShelfId");
 
                     b.ToTable("ITEM");
                 });
@@ -97,6 +97,40 @@ namespace ScanAndGoApi.Migrations
                     b.ToTable("PRODUCT_LIST_ASC");
                 });
 
+            modelBuilder.Entity("ScanAndGoApi.Models.Shelf", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("StoreId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("X1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("X2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Y1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Y2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("SHELF");
+                });
+
             modelBuilder.Entity("ScanAndGoApi.Models.ShoppingList", b =>
                 {
                     b.Property<long>("Id")
@@ -117,6 +151,14 @@ namespace ScanAndGoApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MapUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -165,15 +207,15 @@ namespace ScanAndGoApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScanAndGoApi.Models.Store", "Store")
+                    b.HasOne("ScanAndGoApi.Models.Shelf", "Shelf")
                         .WithMany("Items")
-                        .HasForeignKey("StoreId")
+                        .HasForeignKey("ShelfId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
 
-                    b.Navigation("Store");
+                    b.Navigation("Shelf");
                 });
 
             modelBuilder.Entity("ScanAndGoApi.Models.ProductListAsc", b =>
@@ -195,6 +237,17 @@ namespace ScanAndGoApi.Migrations
                     b.Navigation("ShoppingList");
                 });
 
+            modelBuilder.Entity("ScanAndGoApi.Models.Shelf", b =>
+                {
+                    b.HasOne("ScanAndGoApi.Models.Store", "Store")
+                        .WithMany("Shelves")
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
             modelBuilder.Entity("ScanAndGoApi.Models.ShoppingList", b =>
                 {
                     b.HasOne("ScanAndGoApi.Models.User", "User")
@@ -213,6 +266,11 @@ namespace ScanAndGoApi.Migrations
                     b.Navigation("ProductListAsc");
                 });
 
+            modelBuilder.Entity("ScanAndGoApi.Models.Shelf", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("ScanAndGoApi.Models.ShoppingList", b =>
                 {
                     b.Navigation("ProductsInList");
@@ -220,13 +278,12 @@ namespace ScanAndGoApi.Migrations
 
             modelBuilder.Entity("ScanAndGoApi.Models.Store", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("Shelves");
                 });
 
             modelBuilder.Entity("ScanAndGoApi.Models.User", b =>
                 {
-                    b.Navigation("ShoppingList")
-                        .IsRequired();
+                    b.Navigation("ShoppingList");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScanAndGoApi.Context;
 using ScanAndGoApi.Dtos;
 using ScanAndGoApi.Models;
@@ -96,7 +97,7 @@ namespace ScanAndGoApi.ApiController
                     Product = product,
                     ShoppingList = shoppingList
                 };
-                
+
                 using var context = new DatabaseContextFactory().CreateDbContext(null);
                 //find if there exists one with the same product and shopping list
                 List<ProductListAsc> plas = context.ProductListAsc.Where(pla => pla.Product.id == product.id && pla.ShoppingList.Id == shoppingList.Id).ToList();
@@ -116,5 +117,29 @@ namespace ScanAndGoApi.ApiController
                 return new BadRequestObjectResult(e.Message);
             }
         }
+
+        [HttpGet("GetQuantityInStore/{id}/{storeId}")]
+        public IActionResult GetQuantityInStore([FromRoute] int id, [FromRoute] int storeId)
+        {
+
+            using var context = new DatabaseContextFactory().CreateDbContext(null);
+
+            var shoppingList = context.ProductListAsc.Include(pla => pla.Product).Where(pla => pla.ShoppingList.Id == id).ToList();
+            if (shoppingList == null)
+            {
+                return new NotFoundObjectResult("No such shopping list");
+            }
+            int quantity = 0;
+            foreach (var product in shoppingList)
+            {
+                var item = context.Items.Where(i => i.Product.id == product.Product.id && i.Shelf.Store.Id == storeId).FirstOrDefault();
+                if (item != null)
+                {
+                    quantity++;
+                }
+            }
+            return new OkObjectResult(new Quantity() { quantity = quantity });
+        }
     }
+
 }
